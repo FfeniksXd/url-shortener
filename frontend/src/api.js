@@ -34,5 +34,5 @@ export const login = (email, password) => {
 
 export const getLinks = () => api.get('/links/');
 
-export const createLink = (original_url) => 
-  api.post('/links/', { original_url });
+export const createLink = (original_url,custom_code) => 
+  api.post('/links/', { original_url, custom_code });

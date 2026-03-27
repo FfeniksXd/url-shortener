@@ -4,6 +4,8 @@ import { getLinks, createLink } from '../api';
 function LinkList() {
   const [links, setLinks] = useState([]);
   const [newUrl, setNewUrl] = useState('');
+  const [customCode, setCustomCode] = useState(''); 
+
 
   // Загружаем список ссылок при монтировании компонента
   const fetchLinks = async () => {
@@ -20,16 +22,26 @@ function LinkList() {
   }, []);
 
   // Создание новой ссылки
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    try {
-      await createLink(newUrl);
-      setNewUrl(''); // очищаем поле
-      fetchLinks(); // обновляем список
-    } catch (err) {
-      alert('Ошибка при создании ссылки');
+const handleCreate = async (e) => {
+  e.preventDefault();
+  try {
+    await createLink(newUrl, customCode || undefined);
+    setNewUrl('');
+    setCustomCode('');
+    fetchLinks();
+  } catch (err) {
+    if (err.response && err.response.status === 422) {
+      const detail = err.response.data.detail;
+      if (detail && detail[0] && detail[0].msg) {
+        alert(`Ошибка: ${detail[0].msg}`);
+      } else {
+        alert('Некорректный формат кастомного кода');
+      }
+    } else {
+      alert('Ошибка при создании ссылки: ' + (err.response?.data?.detail || err.message));
     }
-  };
+  }
+};
 
   return (
     <div>
@@ -42,6 +54,15 @@ function LinkList() {
           onChange={(e) => setNewUrl(e.target.value)}
           required
         />
+        <input
+          type="text"
+          placeholder="Желаемый короткий код (необязательно)"
+          value={customCode}
+          onChange={(e) => setCustomCode(e.target.value)}
+          pattern="[a-zA-Z0-9_-]{3,30}"
+          title="3-30 символов, только латиница, цифры, дефис, подчёркивание. Нельзя начинать или заканчивать на - или _."
+        />
+
         <button type="submit">Сократить</button>
       </form>
       <ul>
