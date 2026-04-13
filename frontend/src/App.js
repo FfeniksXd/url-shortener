@@ -3,6 +3,7 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import LinkList from './components/LinkList';
 import './App.css'; // можно оставить как есть
+import TwoFactorSetup from './components/TwoFactorSetup'; // 2FA
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -37,12 +38,14 @@ function App() {
   }
 
   // Авторизован – показываем список ссылок и кнопку выхода
-  return (
-    <div style={{ padding: '20px' }}>
-      <button onClick={handleLogout}>Выйти</button>
-      <LinkList />
-    </div>
-  );
+return (
+  <div style={{ padding: '20px' }}>
+    <button onClick={handleLogout}>Выйти</button>
+    <LinkList />
+    <hr />
+    <TwoFactorSetup />
+  </div>
+);
 }
 
 export default App; 

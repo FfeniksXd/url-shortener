@@ -27,12 +27,35 @@ export const login = (email, password) => {
   const formData = new FormData();
   formData.append('username', email);
   formData.append('password', password);
-  return api.post('/auth/token', formData, {
+  return api.post('/auth/login', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   });
 };
+
+//2FA login verification 
+export const verify2FALogin = (temp_token, code) => 
+  api.post('/auth/verify-2fa-login', null, { params: { temp_token, code } });
+
 
 export const getLinks = () => api.get('/links/');
 
 export const createLink = (original_url,custom_code) => 
   api.post('/links/', { original_url, custom_code });
+
+export const delete_link = (short_code) =>
+  api.delete (`/links/${short_code}`);
+
+
+
+// 2FA
+export const enable2FA = () => api.get('/auth/enable-2fa', { responseType: 'blob' });
+export const verify2FA = (code) => api.post('/auth/verify-2fa', null, { params: { code } });
+export const disable2FA = () => api.post('/auth/disable-2fa');
+
+
+
+export const get2FAStatus = () => api.get('/auth/2fa-status');
+
+
+export const updateLink = (short_code, original_url) => 
+  api.put(`/links/${short_code}`, { original_url });

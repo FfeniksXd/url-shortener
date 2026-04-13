@@ -63,3 +63,6 @@ class LinkOut(LinkBase):
 
     class Config:
         from_attributes = True
+
+class LinkUpdate(BaseModel):
+    original_url: str

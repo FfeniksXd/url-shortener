@@ -76,3 +76,8 @@ async def increment_clicks(db: AsyncSession, link: models.Link):
     link.clicks += 1
     await db.commit()
     # Не делаем refresh, так как обновляем только одно поле
+
+async def delete_link(db: AsyncSession, link: models.Link):
+    #Удаляет ссылку из базы данных
+    await db.delete(link)
+    await db.commit()

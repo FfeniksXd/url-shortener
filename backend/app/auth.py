@@ -9,6 +9,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from . import schemas, crud
 from .database import get_db
 
+
+#2FA imports
+#import pyotp
+#import qrcode
+#from io import BytesIO
+#from fastapi.responses import StreamingResponse 
+
 # Конфигурация JWT
 # В реальном проекте секретный ключ нужно хранить в переменных окружения!
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -68,4 +75,6 @@ async def get_current_user(
     if user is None:
         raise credentials_exception
     return user
+
+
 

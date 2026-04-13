@@ -17,6 +17,10 @@ class User(Base):
     is_active = Column(Boolean, default=True)  # активен ли пользователь (по умолчанию True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())  # дата регистрации (автоматически проставляется базой)
 
+    #поля для 2FA
+    totp_secret = Column(String, nullable=True)        # может быть NULL
+    is_2fa_enabled = Column(Boolean, default=False)   # по умолчанию выключена
+
     # Связь с таблицей ссылок: у одного пользователя может быть много ссылок
     links = relationship("Link", back_populates="owner")
 

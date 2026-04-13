@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLinks, createLink } from '../api';
+import { getLinks, createLink, delete_link, updateLink } from '../api';
 
 function LinkList() {
   const [links, setLinks] = useState([]);
@@ -43,6 +43,31 @@ const handleCreate = async (e) => {
   }
 };
 
+const handleDelete = async (short_code) =>{
+  if (window.confirm('вы уверены что хотите удалить?')){
+    try {
+      await delete_link(short_code);
+      fetchLinks(); //обновляем список
+    } catch(err){
+      alert('ошибка при удалении:' + (err.response?.data?.detail || err.message));
+    }
+  }
+};
+
+
+const handleEdit = async (short_code, currentUrl) => {
+  const newUrl = prompt('Введите новый URL:', currentUrl);
+  if (newUrl && newUrl !== currentUrl) {
+    try {
+      await updateLink(short_code, newUrl);
+      fetchLinks(); // обновляем список
+    } catch (err) {
+      alert('Ошибка редактирования: ' + (err.response?.data?.detail || err.message));
+    }
+  }
+};
+
+
   return (
     <div>
       <h2>Мои ссылки</h2>
@@ -71,6 +96,8 @@ const handleCreate = async (e) => {
             <a href={`http://localhost:8000/${link.short_code}`} target="_blank" rel="noopener noreferrer">
               {link.short_code}
             </a> → {link.original_url} (кликов: {link.clicks})
+            <button onClick={() => handleEdit(link.short_code, link.original_url)}>Редактировать</button>
+            <button onClick={() => handleDelete(link.short_code)}>Удалить</button>
           </li>
         ))}
       </ul>
