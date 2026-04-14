@@ -1,0 +1,260 @@
+.linklist-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: #f7fafc;
+}
+
+.linklist-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 800px;
+  padding: 30px;
+}
+
+.linklist-title {
+  margin: 0 0 24px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+  text-align: center;
+}
+
+.linklist-error {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.linklist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  width: 100%;
+}
+
+.linklist-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.linklist-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.linklist-input:disabled {
+  background: #f7fafc;
+  cursor: not-allowed;
+}
+
+.linklist-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.linklist-button.primary {
+  background: #667eea;
+  color: white;
+}
+
+.linklist-button.primary:hover:not(:disabled) {
+  background: #5a67d8;
+}
+
+.linklist-button.secondary {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.linklist-button.secondary:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.linklist-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.linklist-loader {
+  text-align: center;
+  padding: 20px;
+  color: #718096;
+}
+
+.linklist-empty {
+  text-align: center;
+  padding: 40px;
+  color: #a0aec0;
+  font-size: 16px;
+}
+
+.linklist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linklist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #f7fafc;
+  border-radius: 16px;
+  transition: background 0.2s;
+}
+
+.linklist-item:hover {
+  background: #edf2f7;
+}
+
+.link-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-short {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.link-code {
+  font-weight: 600;
+  font-size: 18px;
+  color: #2d3748;
+  background: #e2e8f0;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.link-original {
+  color: #4a5568;
+  font-size: 14px;
+  word-break: break-word;
+  margin-bottom: 4px;
+}
+
+.link-stats {
+  font-size: 13px;
+  color: #718096;
+}
+
+.link-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.icon-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.icon-button.delete:hover {
+  background: rgba(245, 101, 101, 0.1);
+  color: #e53e3e;
+}
+
+.icon-button.copy,
+.link-open {
+  text-decoration: none;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.link-open:hover {
+  opacity: 1;
+}
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal-content h3 {
+  margin: 0 0 20px;
+  color: #1a202c;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-actions .linklist-button {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .linklist-card {
+    padding: 20px;
+  }
+
+  .linklist-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .link-actions {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+}

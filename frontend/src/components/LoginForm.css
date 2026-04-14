@@ -1,0 +1,176 @@
+/* LoginForm.css */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.login-form {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a202c;
+  text-align: center;
+}
+
+.login-subtitle {
+  margin: 0 0 24px;
+  color: #718096;
+  text-align: center;
+  font-size: 14px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.login-input::placeholder {
+  color: #a0aec0;
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 8px;
+}
+
+.login-button:hover:not(:disabled) {
+  background: #5a67d8;
+}
+
+.login-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.login-button:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+
+.secondary-button:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.error-message {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Секция регистрации */
+.register-section {
+  margin-top: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.register-text {
+  color: #718096;
+  font-size: 14px;
+}
+
+
+.login-form .register-button {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.login-form .register-button:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 30px 20px;
+  }
+  
+  .login-title {
+    font-size: 24px;
+  }
+}
