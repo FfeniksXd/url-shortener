@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getLinks, createLink, delete_link, updateLink } from '../api';
+import { getLinks, createLink, delete_link, updateLink, getLinkStats } from '../api';  // добавили getLinkStats
 import './LinkList.css';
 
-// Базовый URL вашего бэкенда (можно вынести в .env)
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 function LinkList() {
@@ -12,6 +11,8 @@ function LinkList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [editModal, setEditModal] = useState({ open: false, short_code: '', currentUrl: '' });
+  // Новые состояния для статистики
+  const [statsModal, setStatsModal] = useState({ open: false, short_code: '', stats: null, loading: false });
 
   const fetchLinks = async () => {
     setLoading(true);
@@ -95,6 +96,18 @@ function LinkList() {
     alert('Ссылка скопирована!');
   };
 
+  // Новая функция для открытия статистики
+  const handleStatsClick = async (short_code) => {
+    setStatsModal({ open: true, short_code, stats: null, loading: true });
+    try {
+      const response = await getLinkStats(short_code);
+      setStatsModal(prev => ({ ...prev, stats: response.data, loading: false }));
+    } catch (err) {
+      setError('Ошибка загрузки статистики: ' + (err.response?.data?.detail || err.message));
+      setStatsModal({ open: false, short_code: '', stats: null, loading: false });
+    }
+  };
+
   return (
     <div className="linklist-container">
       <div className="linklist-card">
@@ -172,6 +185,13 @@ function LinkList() {
                 </div>
                 <div className="link-actions">
                   <button
+                    className="icon-button stats"
+                    onClick={() => handleStatsClick(link.short_code)}
+                    title="Статистика"
+                  >
+                    📊
+                  </button>
+                  <button
                     className="icon-button edit"
                     onClick={() => handleEditClick(link.short_code, link.original_url)}
                     title="Редактировать"
@@ -217,6 +237,60 @@ function LinkList() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно статистики */}
+      {statsModal.open && (
+        <div className="modal-overlay" onClick={() => setStatsModal({ open: false })}>
+          <div className="modal-content stats-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Статистика переходов</h3>
+            {statsModal.loading ? (
+              <div>Загрузка...</div>
+            ) : statsModal.stats ? (
+              <>
+                <p><strong>Всего переходов:</strong> {statsModal.stats.total_clicks}</p>
+                {statsModal.stats.clicks_data.length === 0 ? (
+                  <p>Нет переходов</p>
+                ) : (
+                  <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    <table className="stats-table">
+                      <thead>
+                        <tr>
+                          <th>Дата</th>
+                          <th>IP</th>
+                          <th>Устройство</th>
+                          <th>ОС</th>
+                          <th>Браузер</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {statsModal.stats.clicks_data.map((click, idx) => (
+                          <tr key={idx}>
+                            <td>{click.clicked_at ? new Date(click.clicked_at).toLocaleString() : '-'}</td>
+                            <td>{click.ip || '-'}</td>
+                            <td>{click.device || '-'}</td>
+                            <td>{click.os || '-'}</td>
+                            <td>{click.browser || '-'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                <div className="modal-actions">
+                  <button
+                    className="linklist-button secondary"
+                    onClick={() => setStatsModal({ open: false })}
+                  >
+                    Закрыть
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p>Ошибка загрузки статистики</p>
+            )}
           </div>
         </div>
       )}

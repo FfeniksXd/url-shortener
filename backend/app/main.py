@@ -1,5 +1,15 @@
 # backend/app/main.py
 
+
+import logging
+
+# Настройка логирования для корневого логгера, чтобы видеть наши сообщения
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import auth, links, redirect

@@ -49,13 +49,15 @@ export const delete_link = (short_code) =>
 
 // 2FA
 export const enable2FA = () => api.get('/auth/enable-2fa', { responseType: 'blob' });
+
 export const verify2FA = (code) => api.post('/auth/verify-2fa', null, { params: { code } });
 export const disable2FA = () => api.post('/auth/disable-2fa');
-
-
-
 export const get2FAStatus = () => api.get('/auth/2fa-status');
 
 
 export const updateLink = (short_code, original_url) => 
   api.put(`/links/${short_code}`, { original_url });
+
+
+
+export const getLinkStats = (short_code) => api.get(`/links/${short_code}/stats`);

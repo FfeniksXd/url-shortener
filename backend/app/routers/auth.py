@@ -15,9 +15,9 @@ from fastapi.responses import StreamingResponse
 from jose import jwt, JWTError
 
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth", tags=["auth"])  
 
-@router.post("/register", response_model=schemas.UserOut)
+@router.post("/register", response_model=schemas.UserOut) 
 async def register(
     user: schemas.UserCreate,
     db: AsyncSession = Depends(get_db)
@@ -127,3 +127,23 @@ async def get_2fa_status(
 ):
     user = await crud.get_user_by_email(db, current_user.email)
     return {"is_2fa_enabled": user.is_2fa_enabled}
+
+
+@router.post("/verify-2fa")
+async def verify_2fa(
+    code: str,
+    current_user: schemas.UserOut = Depends(auth.get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Проверяем, что 2FA инициализирована (есть секрет)
+    if not current_user.totp_secret:
+        raise HTTPException(status_code=400, detail="2FA not initialized")
+    
+    totp = pyotp.TOTP(current_user.totp_secret)
+    if not totp.verify(code):
+        raise HTTPException(status_code=400, detail="Invalid code")
+    
+    # Активируем 2FA
+    current_user.is_2fa_enabled = True
+    await db.commit()
+    return {"message": "2FA enabled successfully"}

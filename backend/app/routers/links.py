@@ -6,13 +6,18 @@ from .. import schemas, crud, auth
 from ..database import get_db
 import random
 import string
+from sqlalchemy import select, desc
 
 router = APIRouter(prefix="/links", tags=["links"])
 
-def generate_short_code(length: int = 6) -> str:
-    """Генерирует случайный код из букв и цифр"""
-    chars = string.ascii_letters + string.digits
-    return ''.join(random.choice(chars) for _ in range(length))
+
+from ..utils import generate_short_code
+
+# Ранее в этом файле была функция generate_short_code, которая генерировала случайный код из букв и цифр. Теперь она перенесена в utils.py, и мы импортируем её оттуда. Внутри функции create_link мы вызываем generate_short_code, который сначала пытается сгенерировать код через C++, а при неудаче — через Python.
+##def generate_short_code(length: int = 6) -> str:
+##    """Генерирует случайный код из букв и цифр"""
+##    chars = string.ascii_letters + string.digits
+##   return ''.join(random.choice(chars) for _ in range(length))
 
 
 
@@ -95,3 +100,41 @@ async def update_link(
     
     return link
 
+
+
+from .. import models   
+
+@router.get("/{short_code}/stats")
+async def get_link_stats(
+    short_code: str,
+    current_user: schemas.UserOut = Depends(auth.get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Проверяем, что ссылка существует и принадлежит пользователю
+    link = await crud.get_link_by_code(db, short_code)
+    if not link:
+        raise HTTPException(status_code=404, detail="Link not found")
+    if link.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your link")
+    
+    # Получаем все клики для этой ссылки
+    result = await db.execute(
+        select(models.Click).where(models.Click.link_id == link.id).order_by(models.Click.clicked_at.desc())
+    )
+    clicks = result.scalars().all()
+    
+    # Формируем ответ
+    stats = {
+        "total_clicks": link.clicks,  # общее число кликов (из таблицы links)
+        "clicks_data": [
+            {
+                "clicked_at": c.clicked_at.isoformat() if c.clicked_at else None,
+                "ip": c.ip,
+                "device": c.device,
+                "os": c.os,
+                "browser": c.browser
+            }
+            for c in clicks
+        ]
+    }
+    return stats

@@ -81,3 +81,23 @@ async def delete_link(db: AsyncSession, link: models.Link):
     #Удаляет ссылку из базы данных
     await db.delete(link)
     await db.commit()
+
+async def save_click(
+    db: AsyncSession,
+    link_id: int,
+    ip: str = None,
+    user_agent: str = None,
+    device: str = None,
+    os: str = None,
+    browser: str = None
+):
+    click = models.Click(
+        link_id=link_id,
+        ip=ip,
+        user_agent=user_agent,
+        device=device,
+        os=os,
+        browser=browser
+    )
+    db.add(click)
+    await db.commit()

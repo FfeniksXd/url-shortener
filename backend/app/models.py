@@ -6,7 +6,7 @@ from sqlalchemy.sql import func  # для автоматического доб�
 from sqlalchemy.orm import relationship  # для связей между таблицами
 from .database import Base  # импортируем базовый класс из database.py
 
-# Таблица пользователей
+
 class User(Base):
     __tablename__ = "users"  # имя таблицы в базе данных
 
@@ -37,3 +37,18 @@ class Link(Base):
 
     # Связь с пользователем
     owner = relationship("User", back_populates="links")
+
+
+   
+
+class Click(Base):
+    __tablename__ = "clicks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    link_id = Column(Integer, ForeignKey("links.id"), nullable=False)
+    clicked_at = Column(DateTime(timezone=True), server_default=func.now())
+    ip = Column(String, nullable=True)
+    user_agent = Column(String, nullable=True)
+    device = Column(String, nullable=True)
+    os = Column(String, nullable=True)
+    browser = Column(String, nullable=True)
